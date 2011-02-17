@@ -1,0 +1,66 @@
+﻿<AddIn name    = "AccessoryMenu"
+   author      = "ClarionEdge"
+   url         = "http://www.clarionedge.com"
+   copyright   = ""
+   description = "">
+  <Manifest>
+    <Identity name="AccessoryMenu.Addin" version="0.2"/>
+    <Dependency addin = "SharpDevelop" version = "2.1"/>
+  </Manifest>
+
+  <Runtime>
+    <Import assembly = "AccessoryMenu.dll"/>
+  </Runtime>
+  <StringResources file="Resources\AccessoryMenu.StringResources.resources" />
+
+  <Path name = "/SharpDevelop/Workbench/MainMenu/Help">
+
+    <!-- Unless option 2 is selected, hide the original menu-->
+    <Condition name="Compare" string="${property:Clarion.AccessoryMenu.MenuOptionsPanel.OptionSelected??1}" equals="2" action="Exclude">
+      <MenuItem id = "SeparatorAccessory1" type = "Separator" insertbefore = "About"/>
+      <MenuItem id = "Accessory"
+                label = "${res:Clarion.AccessoryMenu.MenuLabel}"
+                type="Menu"
+                insertbefore = "About"/>
+      <MenuItem id = "SeparatorAccessory2" type = "Separator" insertbefore = "About"/>
+    </Condition>
+  </Path>
+
+  <!-- Option 1: Create a new menu item at the top of the help menu -->
+  <Path name = "/SharpDevelop/Workbench/MainMenu/Help">
+    <Condition name="Compare" string="${property:Clarion.AccessoryMenu.MenuOptionsPanel.OptionSelected??1}" equals="1">
+      <MenuItem id = "AccessoryTop" 
+                label = "${res:Clarion.AccessoryMenu.MenuLabel}" 
+                type="Menu"
+                insertbefore = "ClarionHelp">
+        <Include id ="AccessoryInclude" path= "/SharpDevelop/Workbench/MainMenu/Help/Accessory"/>
+      </MenuItem>
+      <MenuItem id = "SeparatorAccessoryTop" type = "Separator" insertbefore = "ClarionHelp" />
+    </Condition>
+  </Path>
+
+  <!-- Option 3: Create a TOP LEVEL new menu-->
+  <Path name = "/SharpDevelop/Workbench/MainMenu">
+    <Condition name="Compare" string="${property:Clarion.AccessoryMenu.MenuOptionsPanel.OptionSelected??1}" equals="3">
+      <MenuItem id = "AccessoryTopLevel"
+                label = "${res:Clarion.AccessoryMenu.MenuLabel}" 
+                type="Menu" 
+                insertbefore = "Help">
+        <Include id ="AccessoryInclude" path= "/SharpDevelop/Workbench/MainMenu/Help/Accessory"/>
+      </MenuItem>
+    </Condition>
+  </Path>
+
+  <Path name = "/SharpDevelop/Dialogs/OptionsDialog">
+    <DialogPanel id    = "Accessories"
+		             label = "Accessories"
+                 insertafter = "ToolsOptions"/>
+  </Path>
+
+  <Path name = "/SharpDevelop/Dialogs/OptionsDialog/Accessories">
+    <DialogPanel id = "AccessoryMenu"
+		             label = "Menu Options"
+		             class = "Clarion.AccessoryMenu.MenuOptionsPanel"/>
+  </Path>
+
+</AddIn>
